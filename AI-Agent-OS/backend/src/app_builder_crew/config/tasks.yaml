@@ -1,0 +1,283 @@
+product_manager_task:
+  description: >
+    You are the first agent in a sequential 8-agent app-building team.
+
+    The app idea is: {app_idea}
+
+    Your job is to produce a complete Product Requirements Document (PRD) with these sections:
+
+    1. App Name and Tagline
+    2. Problem Statement
+    3. Target Users
+    4. Core Feature List with priority P0/P1/P2
+    5. MVP Scope
+    6. User Stories
+    7. Acceptance Criteria
+    8. Success Metrics
+    9. Out of Scope
+    10. Risks and Assumptions
+
+    Be specific enough that the design and engineering agents can continue without asking questions.
+
+  expected_output: >
+    A complete PRD in markdown format with all 10 required sections.
+    Minimum 800 words.
+  agent: product_manager
+  output_file: outputs/current_run/01_product_manager_prd.md
+
+
+ui_ux_designer_task:
+  description: >
+    You are agent 2 in the team.
+
+    Use the Product Manager PRD to create a complete UI/UX Design Specification.
+
+    Include these sections:
+
+    1. Design Philosophy and Principles
+    2. Color System with exact hex codes
+    3. Typography System with font sizes and weights
+    4. Spacing and Layout System
+    5. Component Library
+    6. Screen List
+    7. Detailed Screen Layouts
+    8. User Flow Diagrams in text
+    9. Navigation Structure
+    10. Animation and Interaction Patterns
+    11. Accessibility Requirements
+    12. Dark Theme Design Tokens
+
+    Use exact values like 16px, 24px, #1A1A2E, etc.
+
+  expected_output: >
+    A complete UI/UX design specification in markdown format.
+    Include exact colors, spacing, components, and screens.
+  agent: ui_ux_designer
+  context:
+    - product_manager_task
+  output_file: outputs/current_run/02_ui_ux_design.md
+
+
+frontend_developer_task:
+  description: >
+    You are agent 3 in the team.
+
+    Use the PRD and UI/UX design specification to create a Frontend Implementation Plan.
+
+    Include these sections:
+
+    1. Tech Stack Decision
+    2. Project File Structure
+    3. Component Architecture
+    4. State Management Plan
+    5. Routing Plan
+    6. HTML Structure for major screens
+    7. CSS design system and component styles
+    8. JavaScript logic plan
+    9. localStorage schema
+    10. Third-party libraries
+    11. Build and bundle plan
+
+    Write practical implementation details and real code examples where useful.
+
+  expected_output: >
+    A complete frontend implementation plan in markdown format.
+    Include file structure, components, routes, CSS tokens, and JS function examples.
+  agent: frontend_developer
+  context:
+    - product_manager_task
+    - ui_ux_designer_task
+  output_file: outputs/current_run/03_frontend_plan.md
+
+
+backend_developer_task:
+  description: >
+    You are agent 4 in the team.
+
+    Use the PRD, UI/UX spec, and frontend plan to create a Backend Implementation Plan.
+
+    Include these sections:
+
+    1. Backend Tech Stack Decision
+    2. API Architecture
+    3. Authentication Plan
+    4. API Routes
+    5. Request and Response JSON examples
+    6. Business Logic Services
+    7. AI Recommendation Service
+    8. Error Handling
+    9. Security Plan
+    10. Environment Variables
+    11. Backend Folder Structure
+
+    Keep the backend realistic for an MVP.
+
+  expected_output: >
+    A complete backend implementation plan in markdown format.
+    Include API routes, JSON examples, service structure, and security notes.
+  agent: backend_developer
+  context:
+    - product_manager_task
+    - ui_ux_designer_task
+    - frontend_developer_task
+  output_file: outputs/current_run/04_backend_plan.md
+
+
+database_engineer_task:
+  description: >
+    You are agent 5 in the team.
+
+    Use the previous outputs to create a Database Design Document.
+
+    IMPORTANT:
+    Keep the answer focused and do not make it too large.
+    Avoid extremely long sample data.
+    Use SQLite for local MVP unless there is a strong reason to choose another database.
+
+    Include these sections:
+
+    1. Database Choice and reason
+    2. Complete Schema
+    3. Table Relationships
+    4. Indexes
+    5. Sample Data with only 1 to 2 rows per main table
+    6. Migration SQL
+    7. 10 Common Queries
+    8. Data Validation Rules
+    9. Backup and Retention Policy
+    10. Performance Notes
+
+  expected_output: >
+    A focused database design document in markdown format.
+    Include SQL schema and common queries.
+    Keep the output under 2500 words to avoid API timeout.
+  agent: database_engineer
+  context:
+    - product_manager_task
+    - backend_developer_task
+  output_file: outputs/current_run/05_database_schema.md
+
+
+system_architect_task:
+  description: >
+    You are agent 6 in the team.
+
+    Use all previous outputs to create a System Architecture Document.
+
+    Include these sections:
+
+    1. High-level Architecture
+    2. Frontend Architecture
+    3. Backend Architecture
+    4. Database Architecture
+    5. AI/LLM Architecture
+    6. Local-first Privacy Design
+    7. Data Flow
+    8. Module Communication
+    9. Deployment Plan
+    10. Scalability Plan
+    11. Security Architecture
+    12. Future 3D Body Twin Architecture
+
+    Keep it practical for a solo developer MVP.
+
+  expected_output: >
+    A complete but focused system architecture document in markdown format.
+    Include architecture explanation and data flow.
+  agent: system_architect
+  context:
+    - product_manager_task
+    - frontend_developer_task
+    - backend_developer_task
+    - database_engineer_task
+  output_file: outputs/current_run/06_system_architecture.md
+
+
+qa_tester_task:
+  description: >
+    You are agent 7 in the team.
+
+    Use all previous outputs to create a QA and Testing Plan.
+
+    Include these sections:
+
+    1. Testing Strategy
+    2. Manual Test Cases
+    3. Functional Test Cases
+    4. UI Test Cases
+    5. API Test Cases
+    6. Database Test Cases
+    7. Security Test Cases
+    8. Performance Test Cases
+    9. Edge Cases
+    10. MVP Release Checklist
+
+    Keep the test plan practical and useful.
+
+  expected_output: >
+    A QA test plan in markdown format with clear test cases and release checklist.
+  agent: qa_tester
+  context:
+    - product_manager_task
+    - frontend_developer_task
+    - backend_developer_task
+    - database_engineer_task
+    - system_architect_task
+  output_file: outputs/current_run/07_qa_test_plan.md
+
+project_reviewer_task:
+  description: >
+    You are Agent 8 and the final reviewer.
+
+    Review all previous agent outputs and create a final app-building blueprint.
+
+    VERY IMPORTANT RULES:
+    - This app is personal-only for Devendra.
+    - Do not design a public SaaS app.
+    - Do not include public signup, public users, community, social sharing, subscriptions, public profiles, or multi-user MVP.
+    - Must use Next.js frontend.
+    - Must use Supabase for normal structured data.
+    - Must use Python/FastAPI analysis engine.
+    - Must use local encrypted storage for private medical reports, lab reports, body photos, private health notes, sensitive AI analysis, and local LLM memory.
+    - Must not recommend Passport.js, Sequelize, generic TensorFlow.js/BERT, public user systems, or fake complete app code.
+    - Do not output complete app code.
+    - Only output a final blueprint.
+    - Keep the final blueprint practical and under 2500 words.
+
+    Include these sections:
+
+    1. Final App Summary
+    2. Final MVP Feature List
+    3. Final Tech Stack
+    4. Final Folder Structure
+    5. Frontend Build Plan
+    6. Backend Build Plan
+    7. Supabase Database Build Plan
+    8. Local Private Storage Plan
+    9. Python/FastAPI AI Analysis Engine Plan
+    10. Testing Plan
+    11. Step-by-step Development Roadmap
+    12. What to Build First
+    13. Risks and Fixes
+    14. Final Recommendation
+
+    Make the final document clean, practical, and ready for a coding agent to use.
+
+  expected_output: >
+    A final complete app-building blueprint in markdown format.
+    It must combine all previous outputs into one clean final plan.
+    It must follow the personal-only, Next.js, Supabase, Python/FastAPI, and local encrypted storage rules.
+    It must not include fake full app code.
+
+  agent: project_reviewer
+
+  context:
+    - product_manager_task
+    - ui_ux_designer_task
+    - frontend_developer_task
+    - backend_developer_task
+    - database_engineer_task
+    - system_architect_task
+    - qa_tester_task
+
+  output_file: outputs/current_run/08_final_blueprint.md

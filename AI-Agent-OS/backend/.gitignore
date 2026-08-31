@@ -1,0 +1,39 @@
+﻿# secrets
+.env
+*.env
+
+# python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# backend temp backups
+dashboard/backend/*.encoding_backup_*
+
+# runtime memory / logs
+memory/*.json
+memory/*.db
+memory/*.db-*
+memory/*.sqlite
+memory/*.sqlite3
+
+# generated runtime outputs
+generated/
+generated_pages/
+generated_reports/
+backups/
+uploads/
+
+# local outputs created by agent runs
+outputs/current_run/
+outputs/runs/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+memory/*.md

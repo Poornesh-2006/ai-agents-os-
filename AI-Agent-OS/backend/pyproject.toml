@@ -1,0 +1,25 @@
+[project]
+name = "app_builder_crew"
+version = "0.1.0"
+description = "app_builder_crew using crewAI"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "crewai[openai,tools]==1.14.7",
+    "litellm>=1.89.3",
+]
+
+[project.scripts]
+app_builder_crew = "app_builder_crew.main:run"
+run_crew = "app_builder_crew.main:run"
+train = "app_builder_crew.main:train"
+replay = "app_builder_crew.main:replay"
+test = "app_builder_crew.main:test"
+run_with_trigger = "app_builder_crew.main:run_with_trigger"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
